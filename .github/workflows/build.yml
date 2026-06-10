@@ -24,22 +24,13 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             archive
 
-      - name: Export .app
+      - name: Create DMG
         run: |
-          xcodebuild \
-            -exportArchive \
-            -archivePath build/Macabolic.xcarchive \
-            -exportPath build/export \
-            -exportOptionsPlist ExportOptions.plist \
-          || cp -R build/Macabolic.xcarchive/Products/Applications/Macabolic.app build/export/Macabolic.app
-
-      - name: Zip
-        run: |
-          cd build/export
-          zip -r ../../Macabolic.zip Macabolic.app
+          APP="build/Macabolic.xcarchive/Products/Applications/Macabolic.app"
+          hdiutil create -volname Macabolic -srcfolder "$APP" -ov -format UDZO Macabolic.dmg
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Macabolic
-          path: Macabolic.zip
+          path: Macabolic.dmg
