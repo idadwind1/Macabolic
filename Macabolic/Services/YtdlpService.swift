@@ -304,8 +304,9 @@ class YtdlpService: ObservableObject {
         var args = [path.path]
         args.append("--no-playlist")
         
-        let appSupport = getAppSupportDirectory()
-        args.append(contentsOf: ["--ffmpeg-location", appSupport.path])
+        let customFfmpegPath = UserDefaults.standard.string(forKey: "customFfmpegPath") ?? ""
+        let ffmpegLocation = customFfmpegPath.isEmpty ? getAppSupportDirectory().path : customFfmpegPath
+        args.append(contentsOf: ["--ffmpeg-location", ffmpegLocation])
         args.append(contentsOf: ["--paths", "temp:/tmp"])
         
         let outputTemplate: String

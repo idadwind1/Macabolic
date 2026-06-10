@@ -594,7 +594,10 @@ class LanguageService: ObservableObject {
             "custom": "Özel",
             "notifications": "Bildirimler",
             "show_menubar_icon": "Menü Çubuğu Simgesini Göster",
-            "test_notification": "Test Bildirimi Gönder"
+            "test_notification": "Test Bildirimi Gönder",
+            "ffmpeg_path": "FFmpeg Konumu",
+            "ffmpeg_path_hint": "Varsayılan (otomatik)",
+            "ffmpeg_path_desc": "Boş bırakılırsa Macabolic'in kendi FFmpeg'i kullanılır."
         ],
         .english: [
             "home": "Home",
@@ -830,7 +833,10 @@ class LanguageService: ObservableObject {
             "custom": "Custom",
             "notifications": "Notifications",
             "show_menubar_icon": "Show Menu Bar Icon",
-            "test_notification": "Send Test Notification"
+            "test_notification": "Send Test Notification",
+            "ffmpeg_path": "FFmpeg Location",
+            "ffmpeg_path_hint": "Default (automatic)",
+            "ffmpeg_path_desc": "Leave empty to use Macabolic's built-in FFmpeg."
         ]
     ]
 }

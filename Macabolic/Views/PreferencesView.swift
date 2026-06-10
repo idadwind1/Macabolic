@@ -18,6 +18,7 @@ struct PreferencesView: View {
     @AppStorage("showNotifications") private var showNotifications: Bool = true
     @AppStorage("showMenuBarIcon") private var showMenuBarIcon: Bool = true
     @AppStorage("startInBackground") private var startInBackground: Bool = false
+    @AppStorage("customFfmpegPath") private var customFfmpegPath: String = ""
     
     @EnvironmentObject var languageService: LanguageService
     @EnvironmentObject var updateChecker: UpdateChecker
@@ -758,12 +759,41 @@ struct PreferencesView: View {
             Section("SponsorBlock") {
                 Toggle(languageService.s("sponsorblock_desc"), isOn: $sponsorBlock)
             }
-            
+
             ytdlpUpdateSection
             browserCookiesSection
+            ffmpegPathSection
         }
         .macabolicFormStyle()
         .padding()
+    }
+
+    private var ffmpegPathSection: some View {
+        Section(languageService.s("ffmpeg_path")) {
+            HStack {
+                TextField(languageService.s("ffmpeg_path_hint"), text: $customFfmpegPath)
+                    .textFieldStyle(.roundedBorder)
+                    .disabled(true)
+
+                Button(languageService.s("select")) {
+                    selectFfmpegFolder()
+                }
+
+                if !customFfmpegPath.isEmpty {
+                    Button {
+                        customFfmpegPath = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            Text(languageService.s("ffmpeg_path_desc"))
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
     }
 
     private var ytdlpUpdateSection: some View {
@@ -953,6 +983,18 @@ struct PreferencesView: View {
     
 
     
+    private func selectFfmpegFolder() {
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.allowsMultipleSelection = false
+        panel.prompt = languageService.s("select")
+
+        if panel.runModal() == .OK, let url = panel.url {
+            customFfmpegPath = url.path
+        }
+    }
+
     private func selectFolder() {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
