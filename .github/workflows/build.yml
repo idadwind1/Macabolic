@@ -13,12 +13,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build
+      - name: Archive
         run: |
           xcodebuild \
             -project Macabolic.xcodeproj \
             -scheme Macabolic \
             -configuration Release \
             -destination "generic/platform=macOS" \
+            -archivePath build/Macabolic.xcarchive \
             CODE_SIGNING_ALLOWED=NO \
-            build
+            archive
+
+      - name: Export .app
+        run: |
+          xcodebuild \
+            -exportArchive \
+            -archivePath build/Macabolic.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist ExportOptions.plist \
+          || cp -R build/Macabolic.xcarchive/Products/Applications/Macabolic.app build/export/Macabolic.app
+
+      - name: Zip
+        run: |
+          cd build/export
+          zip -r ../../Macabolic.zip Macabolic.app
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Macabolic
+          path: Macabolic.zip
